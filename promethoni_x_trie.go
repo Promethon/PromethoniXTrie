@@ -2,6 +2,8 @@ package PromethoniXTrie
 
 import (
 	"bytes"
+	"errors"
+
 	"github.com/nacamp/go-simplechain/storage"
 )
 
@@ -87,6 +89,9 @@ func (trie *PromethoniXTrie) Get(key Hash) (Data, error) {
 }
 
 func (trie *PromethoniXTrie) Put(key Hash, value Data) (Hash, error) {
+	if key == nil {
+		return nil, errors.New("key should not be null")
+	}
 	var oldData Data = nil
 	var err error
 	action := Update
