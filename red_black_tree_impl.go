@@ -50,7 +50,7 @@ func (t *TrieTreeImpl) Add(key string, value uint64) error {
 	gottenData, err := t.Trie.Get([]byte(key))
 	if err == nil {
 		// EncodedData already exist
-		t.Tree.Remove((*redblacktree.Node)(unsafe.Pointer(byteSliceToPtr(gottenData))).Key)
+		t.Tree.Remove2((*redblacktree.Node)(unsafe.Pointer(byteSliceToPtr(gottenData))))
 		t.Trie.Delete([]byte(key))
 		RBNode := t.Tree.Put(Comparable{Value: value, LastModified: blockHeight}, key)
 		_, err = t.Trie.Put([]byte(key), ptrToByteSlice(uintptr(unsafe.Pointer(RBNode))))
@@ -74,7 +74,7 @@ func (t *TrieTreeImpl) Get(key string) (uint64, uint64, error) {
 func (t *TrieTreeImpl) Delete(key string) error {
 	gottenData, err := t.Trie.Get([]byte(key))
 	if err == nil {
-		t.Tree.Remove((*redblacktree.Node)(unsafe.Pointer(byteSliceToPtr(gottenData))).Key)
+		t.Tree.Remove2((*redblacktree.Node)(unsafe.Pointer(byteSliceToPtr(gottenData))))
 		_, err = t.Trie.Delete([]byte(key))
 	}
 	return err
