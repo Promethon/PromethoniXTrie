@@ -92,6 +92,9 @@ func (trie *PromethoniXTrie) Put(key Hash, value Data) (Hash, error) {
 	if key == nil {
 		return nil, errors.New("key should not be null")
 	}
+	if value == nil {
+		return nil, errors.New("value should not be null")
+	}
 	var oldData Data = nil
 	var err error
 	action := Update
