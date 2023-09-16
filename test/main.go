@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+
 	t, _ := PromethoniXTrie.NewTrieTreeImpl(nil, true)
 	fmt.Printf("trie2:root1: %x \n", t.Trie.RootHash())
 	t.Add("0xeaaaffee24f3ce7b942e7016e37ea2899a3004df", 2526372489)

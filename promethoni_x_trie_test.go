@@ -1,12 +1,14 @@
 package PromethoniXTrie
 
 import (
+	"fmt"
 	"testing"
 )
 
 func TestEmptyTrie(t *testing.T) {
 	trie, _ := NewPromethoniXTrie(nil, false)
 	res := trie.RootHash()
+	fmt.Print(sha3Hash([]byte("test data")))
 	if res != nil {
 		t.Errorf("expected nil but got %x", res)
 	}
