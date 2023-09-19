@@ -20,6 +20,6 @@ To be honest, this question can have many different answers, each with pros and 
 - An initial idea: we can consider this "extra value" as the block time of the last change or use in the contract. For example, if a year has passed since the last change, we can delete that account.
 - Another idea is to charge a fee per certain amount of volume. Whenever this amount is used up and never charged again, delete that account.
 
-The **PromethoniXTrie** project implements the basis of the second idea. It creates a Merkle Patricia Trie and a Red-Black Tree and establishes the desired connection between them and then tests the performance of the **Promethon** idea.
+The **PromethoniXTrie** project implements the basis of the second idea. It creates a Merkle Patricia Trie and a Red-Black Tree and establishes the desired connection between them and then tests the performance of the **Promethon** idea. You can read more about the algorithm [here](https://github.com/Promethon/PromethoniXTrie/blob/main/Promethon.pdf).
 
 Our initial tests have been positive and promising. We are currently implementing this idea on the [go-ethereum](https://github.com/ethereum/go-ethereum) source code and we hope to announce its completion soon!
