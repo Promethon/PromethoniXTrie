@@ -1,24 +1,46 @@
 package main
 
 import (
-	"PromethoniXTrie"
+	"PromethoniXTrie/benchmark"
+	"encoding/gob"
 	"fmt"
+	"os"
+	"time"
 )
 
-func main() {
+func LoadDataset(tree benchmark.TestStruct) error {
+	file, err := os.Open(DatasetName)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
 
-	t, _ := PromethoniXTrie.NewTrieTreeImpl(nil, true)
-	fmt.Printf("trie2:root1: %x \n", t.Trie.RootHash())
-	t.Add("0xeaaaffee24f3ce7b942e7016e37ea2899a3004df", 2526372489)
-	t.ChangeBlockHeight(1990)
-	t.Add("0xeaac8635e9e62ff2e9650881fa37708bc06bdea4", 15372334787)
-	t.ChangeBlockHeight(899886)
-	fmt.Printf("trie root before adding 0x42cc07ded70beed62c2dffd75724619c34ced8cc: %x \n", t.Trie.RootHash())
-	t.Add("0x42cc07ded70beed62c2dffd75724619c34ced8cc", 112)
-	fmt.Printf("trie root after adding 0x42cc07ded70beed62c2dffd75724619c34ced8cc: %x \n", t.Trie.RootHash())
-	fmt.Println(t.Tree)
-	t.ChangeBlockHeight(8998865)
-	fmt.Printf("trie root after deleting 0x42cc07ded70beed62c2dffd75724619c34ced8cc: %x \n", t.Trie.RootHash())
-	fmt.Println(t.Tree)
-	fmt.Println(t.Trie.ActionLogEntries)
+	dec := gob.NewDecoder(file)
+
+	for i := 0; i < SampleSize; i++ {
+		var s AccountData
+		err = dec.Decode(&s)
+
+		if s.BlockNum != 0 {
+			tree.UpdateBlockHeight(s.BlockNum)
+			tree.Add(string(s.Address[:]), uint64(s.Value), s.Data)
+		}
+	}
+	return err
+}
+
+func main() {
+	fmt.Println("Generating Random Dataset...")
+	generateRandomDataset()
+
+	// dummy test
+	LoadDataset(benchmark.EmptyTreeStruct{})
+
+	fmt.Println("Starting...")
+	var startTime int64
+
+	promethon, _ := benchmark.NewPromethoniXTrieImpl(nil, false)
+	startTime = time.Now().UnixNano()
+	LoadDataset(promethon)
+	fmt.Printf("Promethon:\t%d\n", time.Now().UnixNano()-startTime)
 }

@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"golang.org/x/crypto/sha3"
 	"io"
-	"unsafe"
 )
 
 func writeNodeType(writer io.Writer, value NodeType) error {
@@ -86,26 +85,4 @@ func min(x, y int) int {
 		return x
 	}
 	return y
-}
-
-func ptrToByteSlice(u uintptr) []byte {
-	size := unsafe.Sizeof(u)
-	b := make([]byte, size)
-	switch size {
-	case 4:
-		binary.LittleEndian.PutUint32(b, uint32(u))
-	case 8:
-		binary.LittleEndian.PutUint64(b, uint64(u))
-	}
-	return b
-}
-
-func byteSliceToPtr(b []byte) uintptr {
-	switch len(b) {
-	case 4:
-		return uintptr(binary.LittleEndian.Uint32(b))
-	case 8:
-		return uintptr(binary.LittleEndian.Uint64(b))
-	}
-	return 0
 }

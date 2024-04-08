@@ -2,7 +2,6 @@ package PromethoniXTrie
 
 import (
 	"bytes"
-	"errors"
 
 	"github.com/nacamp/go-simplechain/storage"
 )
@@ -18,10 +17,12 @@ type PromethoniXTrie struct {
 }
 
 func NewPromethoniXTrie(
+	dbName string,
 	rootHash Hash,
 	isActionLogEnabled bool,
 ) (*PromethoniXTrie, error) {
-	dbStorage, _ := storage.NewLevelDBStorage("./db")
+	//dbStorage, _ := storage.NewLevelDBStorage("./db/" + dbName)
+	dbStorage, _ := storage.NewMemoryStorage()
 	t := &PromethoniXTrie{
 		rootHash: rootHash,
 		storage:  dbStorage,
@@ -89,12 +90,6 @@ func (trie *PromethoniXTrie) Get(key Hash) (Data, error) {
 }
 
 func (trie *PromethoniXTrie) Put(key Hash, value Data) (Hash, error) {
-	if key == nil {
-		return nil, errors.New("key should not be null")
-	}
-	if value == nil {
-		return nil, errors.New("value should not be null")
-	}
 	var oldData Data = nil
 	var err error
 	action := Update
